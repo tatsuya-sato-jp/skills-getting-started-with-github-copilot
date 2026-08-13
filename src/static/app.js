@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     section.className = "participants-section";
 
     const heading = document.createElement("h5");
-    heading.textContent = "Participants";
+    heading.textContent = `Participants (${participants.length})`;
     section.appendChild(heading);
 
     if (participants.length === 0) {
@@ -28,7 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     participants.forEach((participant) => {
       const item = document.createElement("li");
-      item.textContent = participant;
+
+      const emailSpan = document.createElement("span");
+      emailSpan.className = "participant-email";
+      emailSpan.textContent = participant;
+      item.appendChild(emailSpan);
+
       list.appendChild(item);
     });
 
