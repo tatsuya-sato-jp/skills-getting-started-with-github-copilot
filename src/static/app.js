@@ -4,6 +4,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
+  // Function to build the participants section for an activity
+  function createParticipantsSection(activityName, participants = []) {
+    const section = document.createElement("div");
+    section.className = "participants-section";
+
+    const heading = document.createElement("h5");
+    heading.textContent = "Participants";
+    section.appendChild(heading);
+
+    if (participants.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "no-participants";
+      empty.textContent = "No participants yet";
+      section.appendChild(empty);
+      return section;
+    }
+
+    const list = document.createElement("ul");
+    list.className = "participants-list";
+    list.setAttribute("aria-label", `Participants for ${activityName}`);
+
+    participants.forEach((participant) => {
+      const item = document.createElement("li");
+      item.textContent = participant;
+      list.appendChild(item);
+    });
+
+    section.appendChild(list);
+    return section;
+  }
+
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
@@ -12,6 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Clear loading message
       activitiesList.innerHTML = "";
+
+      // Reset the dropdown, keeping the placeholder option
+      activitySelect.innerHTML = '<option value="">-- Select an activity --</option>';
 
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
@@ -26,6 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
         `;
+
+        activityCard.appendChild(createParticipantsSection(name, details.participants));
 
         activitiesList.appendChild(activityCard);
 
@@ -62,6 +98,9 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
         signupForm.reset();
+
+        // Refresh the activities so the new participant is shown
+        await fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
         messageDiv.className = "error";
