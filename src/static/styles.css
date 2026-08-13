@@ -99,6 +99,10 @@ section h3 {
   word-break: break-word;
 }
 
+.participant-email {
+  color: #333;
+}
+
 .no-participants {
   color: #666;
   font-style: italic;
