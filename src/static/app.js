@@ -39,7 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
-      const response = await fetch("/activities");
+      // Bypass any HTTP/browser caching so the latest participant data is
+      // always shown immediately after a signup, without requiring a
+      // manual page refresh.
+      const response = await fetch("/activities", { cache: "no-store" });
       const activities = await response.json();
 
       // Clear loading message
@@ -101,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         signupForm.reset();
 
         // Refresh the activities so the new participant is shown
+        // immediately, without needing a manual page reload.
         await fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
