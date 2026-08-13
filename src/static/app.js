@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const empty = document.createElement("p");
       empty.className = "no-participants";
       empty.textContent = "No participants yet";
+      empty.setAttribute("aria-label", `No participants yet for ${activityName}`);
       section.appendChild(empty);
       return section;
     }
